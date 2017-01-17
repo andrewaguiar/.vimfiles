@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Users/andrewsilvadeaguiar/dev/ejurista/.git'
+let g:netrw_dirhist_2='/Users/andrewsilvadeaguiar/dev/getmarried/.git'
+let g:netrw_dirhist_3='/usr/local/Cellar/elasticsearch/2.2.1'
