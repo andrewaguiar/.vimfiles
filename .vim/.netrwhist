@@ -1,5 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_cnt =6
 let g:netrw_dirhist_1='/Users/andrewsilvadeaguiar/dev/ejurista/.git'
 let g:netrw_dirhist_2='/Users/andrewsilvadeaguiar/dev/getmarried/.git'
 let g:netrw_dirhist_3='/usr/local/Cellar/elasticsearch/2.2.1'
+let g:netrw_dirhist_4='/Users/andrewsilvadeaguiar/Library/Application Support/Pow/Hosts'
+let g:netrw_dirhist_5='/usr/local/var/postgres'
+let g:netrw_dirhist_6='/Users/andrewsilvadeaguiar/.vimfiles/.vim/bundle/ctrlp.vim'
