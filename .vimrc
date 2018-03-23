@@ -20,6 +20,7 @@ set backspace=indent,eol,start
 set autoindent    " always set autoindenting on
 set copyindent    " copy the previous indentation on autoindenting
 set number        " always show line numbers
+set ruler
 set shiftwidth=2  " number of spaces to use for autoindenting
 set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
 set showmatch     " set show matching parenthesis
@@ -81,9 +82,6 @@ set mouse=a
 " Allows use ; instead of :
 nnoremap ; :
 
-" Turns off search highlighting.
-nnoremap <Leader><space> :noh<CR>
-
 " Forces to use h j k l keys
 map <up> <nop>
 map <down> <nop>
@@ -106,14 +104,13 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-" BufExplorer configuration
-nmap <script> <silent> <unique> <Leader><Leader> :BufExplorer<CR>
-let g:bufExplorerShowRelativePath=1
+nnoremap <Tab> w
+nnoremap <S-Tab> b
+
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
 
 " ack.vim
-nmap <silent> <unique> <Leader>a :Ack
-nmap <silent> <unique> <Leader>as :AckFromSearch
-nmap <silent> <unique> <Leader>af :AckFile
 
 "https://github.com/chad/vimfiles/blob/master/vimrc
 " NERDTree settings
@@ -134,7 +131,8 @@ if exists("g:ctrlp_user_command")
   unlet g:ctrlp_user_command
 endif
 
-let g:ctrlp_max_files=9999999999
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=90
 let g:ctrlp_follow_symlinks=1
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|deps\|_build'
 
@@ -151,15 +149,73 @@ nmap <F4> :.w !pbcopy<CR><CR>
 vmap <F4> :w !pbcopy<CR><CR>
 
 " BASICS
-nnoremap <Leader>. :bd<esc>
-nnoremap <Leader>w :w<esc>
 
-" RUBY
-nnoremap <Leader>rc oputs "#" * 90; puts caller; puts "#" * 90<esc>
-nnoremap <Leader>rp obinding.pry<esc>
-" JAVASCRIPT
-nnoremap <Leader>jp odebugger<esc>
-" ELIXIR
-nnoremap <Leader>xp o(require IEx; IEx.pry)<esc>
-nnoremap <Leader>xm odefmodule A do<c-m>end<esc>k0^wciw
-nnoremap <Leader>xd odef foo() do<c-m>end<esc>k0^wciw
+" Turns off search highlighting.
+nnoremap <Leader><space> :noh<CR>
+
+" BufExplorer configuration
+nmap <script> <silent> <unique> <Leader><Leader> :BufExplorer<CR>
+let g:bufExplorerShowRelativePath=1
+
+" PROGRAMMING
+function! RunCurrentTest()
+  if match(expand("%"), "_test.exs$") != -1
+    execute substitute("!mix test {test}", "{test}", @%, "g")
+  elseif match(expand("%"), "_spec.rb$") != -1
+    execute substitute("!bundle exec rspec {spec}", "{spec}", @%, "g")
+  endif
+endfunction
+
+function! RunAllTests()
+  if !empty(glob("./mix.exs"))
+    execute "!mix test"
+  elseif !empty(glob("./spec"))
+    execute "!bundle exec rspec spec"
+  endif
+endfunction
+
+function! PutBreakPoint()
+  if match(expand("%"), ".ex$") != -1 || match(expand("%"), ".exs$") != -1
+    execute "norm orequire IEx; IEx.pry"
+  elseif match(expand("%"), ".rb$") != -1
+    execute "norm obinding.pry"
+  elseif match(expand("%"), ".js$") != -1
+    execute "norm odebugger"
+  endif
+endfunction
+
+function! InsertNamedSnippet(word)
+  let snippets = {
+      \ 'genserver': 'read ~/.vim/snippets/elixir/genserver.ex',
+      \ 'xmodule': 'read ~/.vim/snippets/elixir/module.ex',
+      \ 'xdef': 'read ~/.vim/snippets/elixir/def.ex'
+      \ }
+
+  if has_key(snippets, a:word)
+    execute "norm diw"
+    execute get(snippets, a:word)
+    execute "norm kdd"
+  endif
+endfunction
+
+function! InsertSnippet()
+  let word = expand("<cword>")
+
+  let snippets = {
+      \ 'genserver': 'read ~/.vim/snippets/elixir/genserver.ex',
+      \ 'rcontroller': 'read ~/.vim/snippets/rails/controller.rb'
+      \ }
+
+  if has_key(snippets, word)
+    execute "norm diw"
+    execute get(snippets, word)
+    execute "norm kdd"
+  endif
+endfunction
+
+map <Leader>d :Dash<esc>
+map <Leader>p :call PutBreakPoint()<CR>
+map <Leader>t :call RunCurrentTest()<CR>
+map <Leader>tt :call RunAllTests()<CR>
+map <Leader>s :call InsertSnippet()<CR>
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
