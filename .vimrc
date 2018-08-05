@@ -1,5 +1,6 @@
 " This must be first, because it changes other options as side effect
 set nocompatible
+set nocp
 
 " call pathogen#helptags()
 " call pathogen#runtime_append_all_bundles()
@@ -131,10 +132,12 @@ if exists("g:ctrlp_user_command")
   unlet g:ctrlp_user_command
 endif
 
-let g:ctrlp_max_files=0
-let g:ctrlp_max_depth=90
+let g:ctrlp_max_files=999999999999
+let g:ctrlp_max_depth=99999
+let g:ctrlp_clear_cache_on_exit=1
 let g:ctrlp_follow_symlinks=1
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|deps\|_build'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|.git$\|deps\|_build'
+" let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|deps\|_build'
 
 " NERDCommenter
 let NERDDefaultNesting = 0
@@ -155,6 +158,8 @@ nnoremap <Leader><space> :noh<CR>
 
 " BufExplorer configuration
 nmap <script> <silent> <unique> <Leader><Leader> :BufExplorer<CR>
+nnoremap <Leader>bd :bufdo bd<CR>
+
 let g:bufExplorerShowRelativePath=1
 
 " PROGRAMMING
@@ -177,8 +182,10 @@ endfunction
 function! PutBreakPoint()
   if match(expand("%"), ".ex$") != -1 || match(expand("%"), ".exs$") != -1
     execute "norm orequire IEx; IEx.pry"
-  elseif match(expand("%"), ".rb$") != -1
-    execute "norm obinding.pry"
+  elseif match(expand("%"), ".html.erb$") != -1
+    execute "norm o<% ((begin; binding.pry; rescue; end);(begin; byebug; rescue; end)) %>"
+  elseif match(expand("%"), ".rb$") != -1 || match(expand("%"), ".rake$") != -1
+    execute "norm o((begin; binding.pry; rescue; end);(begin; byebug; rescue; end))"
   elseif match(expand("%"), ".js$") != -1
     execute "norm odebugger"
   endif
