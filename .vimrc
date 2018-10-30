@@ -148,19 +148,8 @@ au BufRead,BufNewFile *.scss set filetype=scss
 
 set runtimepath^=~/.vim/bundle/ag
 
-nmap <F4> :.w !pbcopy<CR><CR>
-vmap <F4> :w !pbcopy<CR><CR>
-
-" BASICS
-
-" Turns off search highlighting.
-nnoremap <Leader><space> :noh<CR>
-
-" BufExplorer configuration
-nmap <script> <silent> <unique> <Leader><Leader> :BufExplorer<CR>
-nnoremap <Leader>bd :bufdo bd<CR>
-
-let g:bufExplorerShowRelativePath=1
+nmap <F4> :.w !xclip -i -sel c<CR><CR>
+vmap <F4> :w !xclip -i -sel c<CR><CR>
 
 " PROGRAMMING
 function! RunCurrentTest()
@@ -168,14 +157,6 @@ function! RunCurrentTest()
     execute substitute("!mix test {test}", "{test}", @%, "g")
   elseif match(expand("%"), "_spec.rb$") != -1
     execute substitute("!bundle exec rspec {spec}", "{spec}", @%, "g")
-  endif
-endfunction
-
-function! RunAllTests()
-  if !empty(glob("./mix.exs"))
-    execute "!mix test"
-  elseif !empty(glob("./spec"))
-    execute "!bundle exec rspec spec"
   endif
 endfunction
 
@@ -191,38 +172,17 @@ function! PutBreakPoint()
   endif
 endfunction
 
-function! InsertNamedSnippet(word)
-  let snippets = {
-      \ 'genserver': 'read ~/.vim/snippets/elixir/genserver.ex',
-      \ 'xmodule': 'read ~/.vim/snippets/elixir/module.ex',
-      \ 'xdef': 'read ~/.vim/snippets/elixir/def.ex'
-      \ }
+" Turns off search highlighting.
+nnoremap <Leader><space> :noh<CR>
 
-  if has_key(snippets, a:word)
-    execute "norm diw"
-    execute get(snippets, a:word)
-    execute "norm kdd"
-  endif
-endfunction
+" BufExplorer configuration
+nmap <script> <silent> <unique> <Leader><Leader> :BufExplorer<CR>
+nnoremap <Leader>bd :bufdo bd<CR>
 
-function! InsertSnippet()
-  let word = expand("<cword>")
+let g:bufExplorerShowRelativePath=1
 
-  let snippets = {
-      \ 'genserver': 'read ~/.vim/snippets/elixir/genserver.ex',
-      \ 'rcontroller': 'read ~/.vim/snippets/rails/controller.rb'
-      \ }
-
-  if has_key(snippets, word)
-    execute "norm diw"
-    execute get(snippets, word)
-    execute "norm kdd"
-  endif
-endfunction
-
-map <Leader>d :Dash<esc>
 map <Leader>p :call PutBreakPoint()<CR>
 map <Leader>t :call RunCurrentTest()<CR>
-map <Leader>tt :call RunAllTests()<CR>
-map <Leader>s :call InsertSnippet()<CR>
-nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+noremap <Leader>c <C-]>
+nnoremap <Leader>cg :!ctags -R<CR>
