@@ -3,9 +3,13 @@
 ## Installation
 
 ```shell
-cd ~
-git clone git@github.com:andrewaguiar/.vimfiles.git
-ln -s .vimfiles/.vimrc .vimrc
-ln -s .vimfiles/.gvimrc .gvimrc
-ln -s .vimfiles/.vim .vim
+./install.sh
 ```
+
+## Plugins
+  - Ctrl P `ctrl p`: Fuzzy searching and auto complete.
+  - Ag `:Ag <term>`: Silver search `ag` in a inner window.
+  - NerdTree `f2`: Opens a file tree navegation.
+
+## Useful Commands
+
