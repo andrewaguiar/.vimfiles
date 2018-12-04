@@ -79,15 +79,44 @@ set pastetoggle=<F3>
 
 " Enables mouse
 set mouse=a
+set laststatus=2
+
+let NERDChristmasTree = 2
+let NERDTreeHighlightCursorline = 1
+let NERDTreeShowHidden = 1
+let NERDTreeIgnore=['\.$', '\~$']
+let g:ctrlp_dont_split = 'NERD_tree_2'
+
+let g:ctrlp_max_files=999999999999
+let g:ctrlp_max_depth=99999
+let g:ctrlp_clear_cache_on_exit=1
+let g:ctrlp_follow_symlinks=1
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|.git$\|deps\|_build/'
+if exists("g:ctrlp_user_command")
+  unlet g:ctrlp_user_command
+endif
+
+let NERDDefaultNesting = 0
+let NERDSpaceDelims = 1
+let NERDRemoveExtraSpaces = 1
+
+let g:bufExplorerShowRelativePath=1
+
+au BufRead,BufNewFile *.scss set filetype=scss
+
+:hi TabLineFill ctermfg=Black ctermbg=Black
+:hi TabLine ctermfg=White ctermbg=Black
+:hi TabLineSel ctermfg=White ctermbg=DarkGreen
+
+" MAPPINGS
 
 " Allows use ; instead of :
 nnoremap ; :
-
 " Forces to use h j k l keys
+map <right> <nop>
+map <left> <nop>
 map <up> <nop>
 map <down> <nop>
-map <left> <nop>
-map <right> <nop>
 
 " Use cursor keys to navigate buffers.
 map  <Right> :bnext<CR>
@@ -100,89 +129,46 @@ nnoremap j gj
 nnoremap k gk
 
 " Easy window navigation
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+nnoremap <S-Left> <C-w>h
+nnoremap <S-Down> <C-w>j
+nnoremap <S-Up> <C-w>k
+nnoremap <S-Right> <C-w>l
 
-nnoremap <Tab> w
-nnoremap <S-Tab> b
-
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
-
-" ack.vim
-
-"https://github.com/chad/vimfiles/blob/master/vimrc
-" NERDTree settings
-" Enable nice colors
-let NERDChristmasTree = 1
-" Make it easy to see where we are
-let NERDTreeHighlightCursorline = 1
-" Show hidden files
-let NERDTreeShowHidden = 1
-let NERDTreeIgnore=['\.$', '\~$']
-" Make F2 open NERDTree
 nmap <F2> :NERDTreeToggle<cr>
-" https://github.com/kien/ctrlp.vim/issues/78
-" let g:ctrlp_dont_split = 'nerdtree'
-let g:ctrlp_dont_split = 'NERD_tree_2'
-
-if exists("g:ctrlp_user_command")
-  unlet g:ctrlp_user_command
-endif
-
-let g:ctrlp_max_files=999999999999
-let g:ctrlp_max_depth=99999
-let g:ctrlp_clear_cache_on_exit=1
-let g:ctrlp_follow_symlinks=1
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|.git$\|deps\|_build'
-" let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|deps\|_build'
-
-" NERDCommenter
-let NERDDefaultNesting = 0
-let NERDSpaceDelims = 1
-let NERDRemoveExtraSpaces = 1
-
-au BufRead,BufNewFile *.scss set filetype=scss
-
-set runtimepath^=~/.vim/bundle/ag
 
 nmap <F4> :.w !xclip -i -sel c<CR><CR>
 vmap <F4> :w !xclip -i -sel c<CR><CR>
 
-" PROGRAMMING
-function! RunCurrentTest()
-  if match(expand("%"), "_test.exs$") != -1
-    execute substitute("!mix test {test}", "{test}", @%, "g")
-  elseif match(expand("%"), "_spec.rb$") != -1
-    execute substitute("!bundle exec rspec {spec}", "{spec}", @%, "g")
-  endif
-endfunction
-
 function! PutBreakPoint()
-  if match(expand("%"), ".ex$") != -1 || match(expand("%"), ".exs$") != -1
-    execute "norm orequire IEx; IEx.pry"
-  elseif match(expand("%"), ".html.erb$") != -1
-    execute "norm o<% ((begin; binding.pry; rescue; end);(begin; byebug; rescue; end)) %>"
+  if match(expand("%"), ".html.erb$") != -1
+    execute "norm o<% (require 'pry'; binding.pry) %>"
   elseif match(expand("%"), ".rb$") != -1 || match(expand("%"), ".rake$") != -1
-    execute "norm o((begin; binding.pry; rescue; end);(begin; byebug; rescue; end))"
+    execute "norm o(require 'pry'; binding.pry)"
   elseif match(expand("%"), ".js$") != -1
     execute "norm odebugger"
   endif
 endfunction
 
-" Turns off search highlighting.
-nnoremap <Leader><space> :noh<CR>
+function! PutBreakPoint1()
+  if match(expand("%"), ".html.erb$") != -1
+    execute "norm o<% ((begin;require'pry';binding.pry;rescue;end);(begin;byebug;rescue=>e;end)) %>"
+  elseif match(expand("%"), ".rb$") != -1 || match(expand("%"), ".rake$") != -1
+    execute "norm obegin;require 'pry';binding.pry;rescue=>e;end;begin;byebug;rescue=>e;end"
+  elseif match(expand("%"), ".js$") != -1
+    execute "norm odebugger"
+  endif
+endfunction
 
-" BufExplorer configuration
+nnoremap <Leader><space> :noh<CR>
 nmap <script> <silent> <unique> <Leader><Leader> :BufExplorer<CR>
 nnoremap <Leader>bd :bufdo bd<CR>
-
-let g:bufExplorerShowRelativePath=1
-
+nnoremap <Leader>q :bufdo q<CR>
+nnoremap <Leader>w :bufdo w<CR>
 map <Leader>p :call PutBreakPoint()<CR>
-map <Leader>t :call RunCurrentTest()<CR>
-
+map <Leader>p1 :call PutBreakPoint1()<CR>
 noremap <Leader>c <C-]>
 nnoremap <Leader>cg :!ctags -R<CR>
+
+map <Leader>mk :!mkdir -p %:h<CR>
+map <Leader>rm :!rm -rf %<CR>
+
