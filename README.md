@@ -1,5 +1,7 @@
 # My vimfiles
 
+![Example](example1.png)
+
 ## Installation
 
 ```shell
@@ -49,8 +51,7 @@
   - Generate tags (CTags): `,` + `cg`
   - Search tags (CTags): `,` + `c`
 
-## Files / Dir shortcuts
+### Files / Dir shortcuts
 
   - Create missing buffer path: `,` + `mk`
   - Remove current buffer file: `,` + `rm`
-
