@@ -7,11 +7,13 @@
 ```
 
 ## Plugins
+
   - Ctrl P: Fuzzy searching and auto complete.
   - Ag: Silver search `ag` in a inner window.
   - NerdTree: Opens a file tree navegation.
 
 ## Useful Commands
+
   - Leader: `,`
   - Command: `;`
   - Navigation: `h j k l`
@@ -20,27 +22,34 @@
   - Buffer list: `,,`
   - NerdTree: `f2`
 
+### Copy / Paste
+
   - Paste from External: `f3`
   - Copy to External: `f4`
 
-  - Clean searching: `,` + `<space>`
+### Searching
 
+  - Clean searching: `,` + `<space>`
   - Search files: `ctrl` + `p`
   - Auto complete: `ctrl` + `p`
   - Search terms in files: `:` + `Ag <term> [paths]`
+
+### All buffers
 
   - Quit all buffers: `,` + `q`
   - Delete all buffers: `,` + `bd`
   - Save all buffers: `,` + `w`
 
+### Programming
+
   - Put breakpoint 1: `,` + `p`
   - Put breakpoint 2: `,` + `p1`
-
   - Comment: `,` + `cc`
   - Uncomment: `,` + `cu`
-
   - Generate tags (CTags): `,` + `cg`
   - Search tags (CTags): `,` + `c`
+
+## Files / Dir shortcuts
 
   - Create missing buffer path: `,` + `mk`
   - Remove current buffer file: `,` + `rm`

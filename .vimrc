@@ -151,9 +151,9 @@ endfunction
 
 function! PutBreakPoint1()
   if match(expand("%"), ".html.erb$") != -1
-    execute "norm o<% ((begin;require'pry';binding.pry;rescue;end);(begin;byebug;rescue=>e;end)) %>"
+    execute "norm o<% byebug %>"
   elseif match(expand("%"), ".rb$") != -1 || match(expand("%"), ".rake$") != -1
-    execute "norm obegin;require 'pry';binding.pry;rescue=>e;end;begin;byebug;rescue=>e;end"
+    execute "norm obyebug"
   elseif match(expand("%"), ".js$") != -1
     execute "norm odebugger"
   endif
