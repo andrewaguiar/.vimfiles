@@ -5,5 +5,11 @@ As I am using neovim now I converted this repo to be a very minimal vimrc which 
 ## Installation
 
 ```shell
-./install.sh
+curl https://raw.githubusercontent.com/andrewaguiar/.vimfiles/master/.vimrc > /tmp/mvimrc
+```
+
+## Usage
+
+```shell
+vim -u /tmp/mvimrc
 ```
