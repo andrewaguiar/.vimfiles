@@ -4,7 +4,7 @@
 "
 " ## Installation
 "
-"   curl https://raw.githubusercontent.com/andrewaguiar/.vimfiles/master/.vimrc > /tmp/mvimrc
+"   curl https://raw.githubusercontent.com/andrewaguiar/.vimfiles/master/README.vim > /tmp/mvimrc
 "
 " ## Usage
 "
